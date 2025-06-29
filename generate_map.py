@@ -13,9 +13,9 @@ def get_sheet_data():
     data = sheet.get_all_records()
     return data
 
-@app.route('/')
-def home():
-    return render_template('index.html')  # Serves the map
+#@app.route('/')
+#def home():
+    #return render_template('index.html')  # Serves the map
 
 @app.route('/data')
 def serve_data():
