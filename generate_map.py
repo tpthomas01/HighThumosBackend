@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, render_template
+from flask_cors import CORS
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 app = Flask(__name__)
+CORS(app)
 
 def get_sheet_data():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
