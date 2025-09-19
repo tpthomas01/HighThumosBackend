@@ -1,0 +1,36 @@
+name: Geocode missing rows (Render)
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 minutes (UTC)
+  workflow_dispatch: {}
+
+concurrency:
+  group: geocode-missing
+  cancel-in-progress: false
+
+jobs:
+  run-geocode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      # Use secret if set; otherwise default to your Render base
+      BASE: ${{ secrets.RENDER_BASE_URL || 'https://discord-map-api.onrender.com' }}
+
+    steps:
+      - name: Ping /geocode-missing (limit=30)
+        run: |
+          set -e
+          # sanitize and ensure scheme
+          BASE="$(echo -n "$BASE" | tr -d '\r\n ' )"
+          if [[ ! "$BASE" =~ ^https?:// ]]; then BASE="https://$BASE"; fi
+          URL="${BASE%/}/geocode-missing?limit=30"
+          curl -sS --fail --max-time 120 --retry 2 --retry-delay 5 "$URL"
+      
+
+      - name: Warm /data
+        run: |
+          set -e
+          BASE="$(echo -n "$BASE" | tr -d '\r\n ' )"
+          if [[ ! "$BASE" =~ ^https?:// ]]; then BASE="https://$BASE"; fi
+          curl -sS --fail --max-time 30 "${BASE%/}/data" > /dev/null
