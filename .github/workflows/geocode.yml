@@ -2,7 +2,7 @@ name: Geocode missing rows (Render)
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # every 15 minutes (UTC)
+    - cron: "*/20 * * * *"   # every 20 minutes (UTC)
   workflow_dispatch: {}
 
 concurrency:
@@ -17,7 +17,7 @@ jobs:
       # Use secret if set; otherwise default to your Render base
       BASE: ${{ secrets.RENDER_BASE_URL || 'https://discord-map-api.onrender.com' }}
 
-    steps:
+    steps: 
       - name: Ping /geocode-missing (limit=30)
         run: |
           set -e
