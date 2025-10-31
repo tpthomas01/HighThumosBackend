@@ -2,10 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from geopy.geocoders import Nominatim
-from geopy.exc import GeocoderTimedOut
 import requests
-import time
+import json
 import os
 from geopy.extra.rate_limiter import RateLimiter
 from gspread.utils import rowcol_to_a1  # NEW
@@ -65,7 +63,8 @@ CORS(app)
 def open_sheet():
     scope = ['https://spreadsheets.google.com/feeds',
              'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+    creds_info = json.loads(os.environ["GOOGLE_CREDS_JSON"])
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_info, scope)
     client = gspread.authorize(creds)
     return client.open("High Thumos Brotherhood Map (Responses)").sheet1
 
