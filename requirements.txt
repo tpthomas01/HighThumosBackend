@@ -1,5 +1,6 @@
-Flask
-Flask-CORS
+flask
+flask-cors
 gspread
 oauth2client
 geopy
+requests
